@@ -1,0 +1,62 @@
+package Halo;import java.util.Scanner;
+
+class Transaksi {
+    int[] hargaBarang;
+    int[] jumlahBarang;
+    double diskon = 0.0;
+
+    public Transaksi(int[] hargaBarang) {
+        this.hargaBarang = hargaBarang;
+        this.jumlahBarang = new int[hargaBarang.length];
+    }
+
+    public void inputJumlahBarang(Scanner input) {
+        for (int i = 0; i < hargaBarang.length; i++) {
+            System.out.print("Jumlah Barang " + (char)('X' + i) + " : ");
+            jumlahBarang[i] = input.nextInt();
+        }
+    }
+
+    public int hitungTotalHarga() {
+        int totalHarga = 0;
+        for (int i = 0; i < hargaBarang.length; i++) {
+            totalHarga += hargaBarang[i] * jumlahBarang[i];
+        }
+        return totalHarga;
+    }
+
+    public double hitungDiskon(int totalHarga) {
+        if (totalHarga >= 5e6) {
+            diskon = 0.1; // Diskon 10% jika total belanja >= 5 juta
+        } else if (totalHarga >= 3e6) {
+            diskon = 0.05; // Diskon 5% jika total belanja >= 3 juta
+        }
+        return totalHarga * diskon;
+    }
+}
+
+public class MainApp {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        
+        int[] hargaBarang = {300000, 200000, 100000};
+
+        Transaksi transaksi = new Transaksi(hargaBarang);
+
+        System.out.println("Masukkan jumlah barang yang ingin Anda beli:");
+        transaksi.inputJumlahBarang(input);
+
+        int totalHarga = transaksi.hitungTotalHarga();
+        System.out.println("\nTotal belanja anda adalah sebesar : " + totalHarga + "\n");
+
+        double totalDiskon = transaksi.hitungDiskon(totalHarga);
+        if (totalDiskon > 0) {
+            System.out.println("Selamat anda mendapatkan diskon sebesar " + (totalDiskon / totalHarga * 100) + "%!");
+        } else {
+            System.out.println("Maaf anda belum berhak untuk mendapatkan diskon");
+        }
+
+        System.out.println("Jumlah diskon yang anda dapatkan : " + totalDiskon);
+        System.out.println("\nJumlah yang anda harus bayar : " + (totalHarga - totalDiskon));
+    }
+}
